@@ -1,0 +1,183 @@
+on early-init
+# Give the kernel time to enumerate the internal and external MMC/SD cards
+# before init creates the devices in /dev
+    exec /sbin/sleep 0.5
+    start ueventd
+    start healthd
+
+on init
+    export PATH /sbin:/system/bin
+    export LD_LIBRARY_PATH .:/sbin
+    export ANDROID_ROOT /system
+    export ANDROID_DATA /data
+    export EXTERNAL_STORAGE /sdcard
+
+    # Set up busybox's shell
+    export ENV /system/etc/profile
+
+    #symlink /system/etc /etc
+
+    mkdir /dev/block/by-name 0755 root root
+    start fsfinder
+    wait /dev/block/by-name/system
+
+    start emmc_protect
+
+#FIXME
+#    start configure_vold
+#    wait /dev/.vold_configured
+
+    mkdir /boot
+    mkdir /rom
+    mkdir /factory
+    mkdir /system
+    mkdir /emmc
+    mkdir /cache
+    mkdir /data
+    
+    mkdir /sdcard
+    mkdir /sd-ext
+    #mkdir /datadata
+    mkdir /d
+    mount debugfs debugfs /d
+    mount tmpfs tmpfs /tmp
+    mount vfat /dev/block/mmcblk0p2 /rom sync noatime nodiratime
+
+on fs
+    mkdir /dev/usb-ffs 0770 shell shell
+    mkdir /dev/usb-ffs/adb 0770 shell shell
+    mount functionfs adb /dev/usb-ffs/adb uid=2000,gid=2000
+
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 18D1
+    write /sys/class/android_usb/android0/idProduct D002
+    write /sys/class/android_usb/android0/f_ffs/aliases adb
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
+    write /sys/class/android_usb/android0/iProduct ${ro.product.model}
+    write /sys/class/android_usb/android0/iSerial ${ro.serialno}
+
+on boot
+
+    ifup lo
+    hostname localhost
+    domainname localdomain
+
+    class_start default
+
+#   Set EPD Flushing Update percentage for AUTO Mode.
+    write /sys/class/graphics/fb0/epd_percent 85
+#   Set EPD Flush elimination window (ms) for AUTO Mode.
+    write /sys/class/graphics/fb0/epd_delay 100
+
+    write /sys/class/graphics/fb0/pgflip_refresh 1
+    write /sys/class/graphics/fb0/epd_refresh 0
+
+    # Give baseimage and bridged time to start
+    exec /sbin/sleep 1.5
+    start omap-edpd
+     
+    # Give omap-edpd time to start or the first image may not be shown
+    exec /sbin/sleep 1.5
+
+    start console
+
+    write /sys/class/graphics/fb0/epd_refresh 1
+    start recovery
+
+on property:sys.powerctl=*
+   powerctl ${sys.powerctl}
+
+on property:sys.storage.ums_enabled=1
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/functions adb,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+
+on property:sys.storage.ums_enabled=0
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/enable ${service.adb.root}
+
+on property:sys.usb.config=none
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/bDeviceClass 0
+
+on property:sys.usb.config=mtp,adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+
+on property:sys.usb.config=adb
+    stop adbd
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/enable ${service.adb.root}
+    start adbd
+
+service console /sbin/sh
+    class core
+    console
+    disabled
+    group log
+
+service fsfinder /sbin/fsfinder
+    class core
+    disabled
+    oneshot
+
+service emmc_protect /sbin/recovery_emmc_protect.sh start
+    class core
+    disabled
+    oneshot
+
+#service configure_vold /sbin/configure_vold.sh
+#    class core
+#    disabled
+#    oneshot
+
+service ueventd /sbin/ueventd
+    critical
+
+service healthd /sbin/healthd -n
+    critical
+
+service recovery /sbin/recovery
+
+service adbd /sbin/adbd recovery
+    disabled
+    socket adbd stream 660 system system
+
+# Always start adbd on userdebug and eng builds
+on property:ro.debuggable=1
+    #write /sys/class/android_usb/android0/enable 1
+    #start adbd
+    setprop service.adb.root 1
+
+# Restart adbd so it can run as root
+on property:service.adb.root=1
+    write /sys/class/android_usb/android0/enable 0
+    restart adbd
+    write /sys/class/android_usb/android0/enable 1
+
+# load DSP firmware
+service baseimage /sbin/cexec.out -T /etc/dsp/baseimage.dof
+    class default
+    user root
+    group system
+    oneshot
+
+#service bridged /sbin/bridged
+#    class default
+#    user root
+#    group system
+#    oneshot
+
+service omap-edpd /sbin/omap-edpd.elf --timeout=2 -pV220 --fbdev=/dev/graphics/fb0 -s /etc/dsp/subframeip_snode_dsp.dll64P -w /etc/EpdWaveform,/etc/dsp/default_waveform.bin
+    class core
+    user root
+    group system
+    oneshot
+    disabled

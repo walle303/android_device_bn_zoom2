@@ -1,0 +1,33 @@
+#
+# ADDITIONAL_DEFAULT_PROPERTIES
+#
+ro.adb.secure=0
+ro.secure=0
+ro.allow.mock.location=0
+ro.debuggable=1
+persist.sys.usb.config=adb
+
+#
+# system.prop for zoom2
+#
+wifi.interface=wlan0
+wifi.supplicant_scan_interval=30
+
+ro.vold.switchablepair=/storage/sdcard1,/storage/sdcard0
+ro.cwm.forbid_format=/boot,/rom
+persist.sys.usb.config=mtp,adb
+ro.emmc=1
+
+ro.opengles.version=131072
+ro.sf.hwrotation=0
+ro.sf.lcd_density=160
+
+# 256 MB is "low RAM" for Android purposes
+ro.config.low_ram=true
+# XXX This optimization slows down SGX540; is this true of SGX530 too?
+ro.hwui.disable_scissor_opt=true
+# GPU producer to CPU consumer not supported
+ro.bq.gpu_to_cpu_unsupported=1
+
+# Tell CyanogenMod we mean to have KSM enabled by default
+ro.ksm.default=1

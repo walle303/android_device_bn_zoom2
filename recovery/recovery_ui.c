@@ -14,92 +14,62 @@
  * limitations under the License.
  */
 
+/*
+ * Derived from default_recovery_ui.c in the CWM recovery source.  This file
+ * must be kept in sync with changes to that file upstream.
+ */
+
+#include <string.h>
+#include <unistd.h>
 #include <linux/input.h>
-#include <stdlib.h>
-#include <sys/types.h>
 
 #include "recovery_ui.h"
 #include "common.h"
 #include "extendedcommands.h"
 
+#define SYSTEM_DEV_SYMLINK "/dev/block/mmcblk0p5"
+/* Needs to be enough for strlen("/dev/block/mmcblk0pX"), at least */
+#define SYSTEM_DEV_MAXLEN 32
+
+#define SYSTEM_DEV_EMMC "/dev/block/mmcblk0p5"
+#define SYSTEM_DEV_SD "/dev/block/mmcblk1p2"
+
 char* MENU_HEADERS[] = { NULL };
 
 char* MENU_ITEMS[] = { "reboot system now",
-                       "apply update from sdcard",
-                       "wipe data / factory reset",
+                       "install zip",
+                       "wipe data/factory reset",
                        "wipe cache partition",
-                       "install zip from sdcard",
                        "backup and restore",
                        "mounts and storage",
                        "advanced",
                        NULL };
 
+void device_ui_init(UIParameters* ui_parameters) {
+}
+
 int device_recovery_start() {
+    char system_dev[SYSTEM_DEV_MAXLEN];
+    ssize_t len;
+
+    /* Find out whether we're operating on eMMC or SD and inform the user */
+    len = readlink(SYSTEM_DEV_SYMLINK, system_dev, SYSTEM_DEV_MAXLEN - 1);
+    system_dev[len] = '\0';
+
+    if (strcmp(system_dev, SYSTEM_DEV_EMMC) == 0)
+        ui_print("Managing an eMMC installation\n");
+    else if (strcmp(system_dev, SYSTEM_DEV_SD) == 0)
+        ui_print("Managing a SD installation\n");
+    else
+        ui_print("Managing non-standard installation with /system on %s\n",
+                 system_dev);
+
     return 0;
 }
 
-int device_toggle_display(volatile char* key_pressed, int key_code) {
-    int alt = key_pressed[KEY_LEFTALT] || key_pressed[KEY_RIGHTALT];
-    if (alt && key_code == KEY_L)
-        return 1;
-    // allow toggling of the display if the correct key is pressed, and the display toggle is allowed or the display is currently off
-    if (ui_get_showing_back_button()) {
-        return get_allow_toggle_display() && (key_code == KEY_END);
-    }
-    return get_allow_toggle_display() && (key_code == KEY_POWER || key_code == KEY_END);
-}
-
+// add here any key combo check to reboot device
 int device_reboot_now(volatile char* key_pressed, int key_code) {
     return 0;
-}
-
-int device_handle_key(int key_code, int visible) {
-    pid_t  pid;
-    pid = 0;
-    if (visible) {
-        switch (key_code) {
-            case 158:
-                return HIGHLIGHT_DOWN;
-            case 407:
-                return HIGHLIGHT_UP;
-
-            case KEY_POWER:
-                if (ui_get_showing_back_button()) {
-                    return SELECT_ITEM;
-                }
-                if (!get_allow_toggle_display())
-                    return GO_BACK;
-                break;
-            case KEY_HOME:
-            case KEY_LEFTBRACE:
-            case KEY_ENTER:
-            case BTN_MOUSE:
-            case KEY_CENTER:
-            case KEY_CAMERA:
-            case KEY_F21:
-            case KEY_SEND:
-	        pid = fork();
-	        if (!pid){
-		    __system("/sbin/refresh.sh");
-		    exit(0);
-		}
-		
-                return SELECT_ITEM;
-            case 139:
-	    case 412:
-            case KEY_END:
-            case KEY_BACKSPACE:
-		pid = fork();
-	        if (!pid){
-		    __system("/sbin/refresh.sh");
-		    exit(0);
-		}
-                if (!get_allow_toggle_display())
-                    return GO_BACK;
-        }
-    }
-
-    return NO_ACTION;
 }
 
 int device_perform_action(int which) {

@@ -12,9 +12,9 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 
-# So what does this do?  It converts an encore /root "ramdisk" from
+# So what does this do?  It converts an zoom2 /root "ramdisk" from
 # supporting emmc to supporting SD.  Basically it just converts the
-# init.encore.rc to point to the SD partitions as follows:
+# init.zoom2.rc to point to the SD partitions as follows:
 #
 # /system == p2
 # /data   == p3

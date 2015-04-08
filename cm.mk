@@ -1,0 +1,34 @@
+#
+# Copyright (C) 2012 The CyanogenMod Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+$(call inherit-product, device/bn/zoom2/full_zoom2.mk)
+
+PRODUCT_RELEASE_NAME := Nook
+
+# We need screen width/height defined before inheriting
+# common_full_tablet_wifionly.mk to avoid automatically bringing in the wrong
+# boot animation.
+TARGET_SCREEN_HEIGHT := 800
+TARGET_SCREEN_WIDTH := 600
+TARGET_BOOTANIMATION_HALF_RES := true
+
+# Inherit some common CM stuff.
+$(call inherit-product, vendor/cm/config/common_mini_tablet_wifionly.mk)
+
+PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=zoom2 BUILD_FINGERPRINT="generic/zoom2/zoom2/zoom2:2.1/ERD79/1.2.1:user/test-keys" PRIVATE_BUILD_DESC="1.2.1.24.carbon1_2.gossamer.rrdp.s70455"
+
+PRODUCT_NAME := cm_zoom2
+PRODUCT_DEVICE := zoom2
