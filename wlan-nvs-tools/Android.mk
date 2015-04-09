@@ -1,4 +1,4 @@
-ifeq ($(strip $(TARGET_BOOTLOADER_BOARD_NAME)),encore)
+ifeq ($(strip $(TARGET_BOOTLOADER_BOARD_NAME)),zoom2)
 
 LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
