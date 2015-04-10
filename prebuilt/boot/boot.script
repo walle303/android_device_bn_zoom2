@@ -1,6 +1,6 @@
 mmcinit 0
 mmcinit 1
-setenv bootargs androidboot.bootdevice=SD androidboot.hardware=zoom2 androidboot.console=ttyO1 console=ttyO1,115200n8 root=/dev/ram rw init=/init vram=4M video=omap3epfb:mode=800x600x16x14x270x0,pmic=tps65180-1p2-i2c,vcom=-2230
+setenv bootargs androidboot.bootdevice=SD androidboot.hardware=zoom2 androidboot.console=ttyO1 console=ttyO1,115200n8 root=/dev/ram rw init=/init vram=4M video=omap3epfb:mode=800x600x16x14x270x0,pmic=${epd_pmic},vcom=${vcom}
 fatload mmc 0 0x81c00000 uImage
 fatload mmc 0 0x82f00000 uRamdisk
 bootm 0x81c00000 0x82f00000
