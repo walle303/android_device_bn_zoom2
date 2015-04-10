@@ -162,7 +162,9 @@ PRODUCT_PACKAGES += \
     libomap_mm_library_jni \
     librs_jni \
     libtiOsLib \
-    make_ext4fs
+    make_ext4fs \
+    lights.zoom2 \
+    power.zoom2
 
 #needs omapfb
 #    hwcomposer.omap3 \

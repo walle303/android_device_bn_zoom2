@@ -20,6 +20,8 @@ TARGET_SPECIFIC_HEADER_PATH := device/bn/zoom2/include
 PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true
 PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.jit.codecachesize=0
 
+#just in case...
+BOARD_HAVE_BLUETOOTH := true
 
 
 #FIXME are these still used?
