@@ -149,9 +149,10 @@ on boot
 on property:dev.bootcomplete=1
     start bootcnt
     class_start default
-
+#disable pageflip refresh mode
+    write /sys/class/graphics/fb0/pgflip_refresh 0
 #   Set EPD Flushing Update percentage for AUTO Mode.
-    write /sys/class/graphics/fb0/epd_percent 85
+    write /sys/class/graphics/fb0/epd_percent 66
 #   Set EPD Flush elimination window (ms) for AUTO Mode.
     write /sys/class/graphics/fb0/epd_delay 100
 

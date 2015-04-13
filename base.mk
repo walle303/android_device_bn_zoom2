@@ -19,9 +19,20 @@
 # build of the emulator, but all those aspects can be overridden
 # in inherited configurations.
 
+
+#Removed apps:
 #PRODUCT_PACKAGES := \
 #    libfwdlockengine \
 #    WAPPushManager
+#    Bluetooth \
+#    Camera2 \
+#    Music \
+#    Email \
+#    Exchange2 \
+#    bluetooth-health \
+##    Contacts \
+#    PicoTts \
+
 
 # Additional settings used in all AOSP builds
 PRODUCT_PROPERTY_OVERRIDES := \
@@ -37,15 +48,14 @@ PRODUCT_AAPT_CONFIG := normal
 # Get a list of languages.
 PRODUCT_LOCALES := en_US en_GB fr_FR it_IT de_DE es_ES
 
-PRODUCT_POLICY := android.policy_phone
+#try mid (mobile internet device?) because nook isn't a phone
+PRODUCT_POLICY := android.policy_mid
 
 PRODUCT_PACKAGES := \
     DeskClock \
     Calculator \
     Calendar \
     CertInstaller \
-    Email \
-    Exchange2 \
     FusedLocation \
     Gallery2 \
     InputDevices \
@@ -59,14 +69,9 @@ PRODUCT_PACKAGES := \
     SystemUI \
     TeleService \
     CalendarProvider \
-    bluetooth-health \
     hostapd \
     wpa_supplicant.conf \
     WallpaperCropper \
-    Bluetooth \
-
-#    Camera2 \
-#    Music \
 
 PRODUCT_PACKAGES += \
     clatd \
@@ -112,9 +117,6 @@ PRODUCT_PACKAGES += \
     ProxyHandler \
     SharedStorageBackup \
     VpnDialogs
-
-#    Contacts \
-#    PicoTts \
 
 PRODUCT_PACKAGES += \
     ContactsProvider \

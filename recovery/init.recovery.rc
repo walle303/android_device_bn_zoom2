@@ -71,7 +71,9 @@ on boot
     write /sys/class/graphics/fb0/epd_delay 100
 
     write /sys/class/graphics/fb0/pgflip_refresh 1
-    write /sys/class/graphics/fb0/epd_refresh 0
+#   write /sys/class/graphics/fb0/epd_refresh 0
+
+    start baseimage
 
     # Give baseimage and bridged time to start
     exec /sbin/sleep 1.5
@@ -167,13 +169,15 @@ service baseimage /sbin/cexec.out -T /etc/dsp/baseimage.dof
     class default
     user root
     group system
+    disabled
     oneshot
 
-#service bridged /sbin/bridged
-#    class default
-#    user root
-#    group system
-#    oneshot
+service bridged /sbin/bridged
+    class default
+    user root
+    group system
+    oneshot
+    disabled
 
 service omap-edpd /sbin/omap-edpd.elf --timeout=2 -pV220 --fbdev=/dev/graphics/fb0 -s /etc/dsp/subframeip_snode_dsp.dll64P -w /etc/EpdWaveform,/etc/dsp/default_waveform.bin
     class core

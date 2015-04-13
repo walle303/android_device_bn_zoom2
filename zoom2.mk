@@ -233,14 +233,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 $(call inherit-product-if-exists, vendor/bn/zoom2/zoom2-vendor.mk)
 
-#   qemu.sf.lcd_density=160 \
-#   ro.sf.hwrotation=270 \
-#    wifi.interface=tiwlan0 \
-#   alsa.mixer.playback.master=DAC2 Analog ???? This is on stock, and don't have headphone connectors    
-#    alsa.mixer.playback.master=default \
-#    alsa.mixer.capture.master=Analog \
-#     dalvik.vm.heapsize=32m \
-
 # Set property overrides
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dexopt-flags=m=y \
