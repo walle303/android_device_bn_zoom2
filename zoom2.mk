@@ -51,15 +51,11 @@ PRODUCT_PACKAGES += \
 
 # key mapping and touchscreen files
 PRODUCT_COPY_FILES += \
-    device/bn/zoom2/prebuilt/usr/idc/zforce-ts.idc:/system/usr/idc/zForce_Touchscreen.idc 
-
-#FIXME
-#    device/bn/encore/prebuilt/usr/idc/ft5x06-i2c.idc:/system/usr/idc/ft5x06-i2c.idc \
-#    device/bn/encore/prebuilt/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
-
-
-
-
+    device/bn/zoom2/prebuilt/usr/idc/zforce-ts.idc:/system/usr/idc/zForce_Touchscreen.idc \
+    device/bn/zoom2/prebuilt/usr/idc/twl4030-keypad.idc:/system/usr/idc/twl4030-keypad.idc \
+    device/bn/zoom2/prebuilt/usr/keylayout/twl4030-keypad.kl:system/usr/keylayout/twl4030-keypad.kl \
+    device/bn/zoom2/prebuilt/usr/keychars/twl4030-keypad.kcm:system/usr/keychars/twl4030-keypad.kcm \
+    device/bn/zoom2/prebuilt/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl
 
 # PowerVR graphics driver configuration
 PRODUCT_COPY_FILES += \
