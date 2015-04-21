@@ -145,14 +145,12 @@ on post-fs-data
     write /sys/devices/platform/omap/omap_hsmmc.1/mmc_host/mmc0/mmc0:0001/block/mmcblk0/queue/iosched/quantum 1
 
 on boot
-    
-on property:dev.bootcomplete=1
     start bootcnt
     class_start default
 #disable pageflip refresh mode
     write /sys/class/graphics/fb0/pgflip_refresh 0
 #   Set EPD Flushing Update percentage for AUTO Mode.
-    write /sys/class/graphics/fb0/epd_percent 66
+    write /sys/class/graphics/fb0/epd_percent 85
 #   Set EPD Flush elimination window (ms) for AUTO Mode.
     write /sys/class/graphics/fb0/epd_delay 100
 
@@ -252,7 +250,8 @@ service baseimage /system/bin/cexec.out /system/lib/dsp/baseimage.dof
     oneshot
 
 service omap-edpd /system/bin/omap-edpd.elf --timeout=2 -pV220 --fbdev=/dev/graphics/fb0 -s /system/lib/dsp/subframeip_snode_dsp.dll64P -w /rom/devconf/EpdWaveform,/system/etc/default_waveform.bin
-    class main
+    class core
+    critical
     user root
     group root
     oneshot

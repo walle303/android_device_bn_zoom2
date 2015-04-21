@@ -179,9 +179,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Launcher3 \
     Trebuchet \
-    CMFileManager
+    CMFileManager \
+    CMWallpapers 
 
-#    CMWallpapers \
 #    LockClock \
 #    CMUpdater \
 #    CMAccount \

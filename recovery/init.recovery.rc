@@ -172,13 +172,6 @@ service baseimage /sbin/cexec.out -T /etc/dsp/baseimage.dof
     disabled
     oneshot
 
-service bridged /sbin/bridged
-    class default
-    user root
-    group system
-    oneshot
-    disabled
-
 service omap-edpd /sbin/omap-edpd.elf --timeout=2 -pV220 --fbdev=/dev/graphics/fb0 -s /etc/dsp/subframeip_snode_dsp.dll64P -w /etc/EpdWaveform,/etc/dsp/default_waveform.bin
     class core
     user root
