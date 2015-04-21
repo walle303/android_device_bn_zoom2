@@ -36,6 +36,7 @@ TARGET_PROVIDES_INIT_TARGET_RC := true
 TARGET_PROVIDES_RELEASETOOLS := true
 TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := ./device/bn/zoom2/releasetools/zoom2_img_from_target_files
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := ./device/bn/zoom2/releasetools/zoom2_ota_from_target_files
+TARGET_CUSTOM_RELEASETOOL := ./device/bn/zoom2/releasetools/squisher
 TARGET_SYSTEMIMAGE_USE_SQUISHER := true
 
 #kernel image configuration
@@ -71,8 +72,8 @@ TARGET_ARCH_LOWMEM := true
 
 # HW Graphics (EGL fixes + webkit fix)
 BOARD_EGL_CFG := device/bn/zoom2/egl.cfg
-USE_OPENGL_RENDERER := true
-ENABLE_WEBGL := true
+USE_OPENGL_RENDERER := false
+ENABLE_WEBGL := false
 
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
@@ -121,7 +122,8 @@ TARGET_BOOTANIMATION_USE_RGB565 := true
 
 #system image configuration
 TARGET_USERIMAGES_USE_EXT4 := true
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 292438016 #292438016 # made multiple of 4096 - old 292436992
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 536870912 #512Mb, room to grow
+#Old: 292438016 #292438016 # made multiple of 4096 - old 292436992
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 827691008
 BOARD_CACHEIMAGE_PARTITION_SIZE := 243698688
 BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
