@@ -72,8 +72,8 @@ do_symlinks:
 	switch (bootdev) {
 	case SD:
 		if (symlink("/dev/block/mmcblk1p1", SYMLINKS_DIR "boot") ||
-		    symlink("/dev/block/mmcblk1p3", SYMLINKS_DIR "userdata") ||
-		    symlink("/dev/block/mmcblk1p4", SYMLINKS_DIR "cache") ||
+		    symlink("/dev/block/mmcblk1p4", SYMLINKS_DIR "userdata") ||
+		    symlink("/dev/block/mmcblk1p3", SYMLINKS_DIR "cache") ||
 		    symlink("/dev/block/mmcblk1p2", SYMLINKS_DIR "system")) {
 			perror("Creating device symlink failed");
 			return 1;

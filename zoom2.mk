@@ -137,6 +137,11 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
         $(LOCAL_PATH)/ramdisk_tools.sh:ramdisk_tools.sh
 
+#create_sd.sh -- creates a partitioned sdcard image with twrp recovery
+PRODUCT_COPY_FILES += \
+        $(LOCAL_PATH)/create_sd.sh:create_sd.sh
+
+
 # additions to recovery
 #PRODUCT_COPY_FILES += \
 #    $(LOCAL_PATH)/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
