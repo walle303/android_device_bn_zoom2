@@ -16,7 +16,7 @@ BRUTECRUSH="-brute"
 POSTERIZE="--posterize 3"
 TMPDIR=/tmp/opticharge-$$
 
-. $ANDROID_BUILD_TOP/vendor/cm/tools/functions
+. $ANDROID_BUILD_TOP/device/bn/zoom2/releasetools/functions
 
 if [ -z "$BRUTE_PNGCRUSH" ]
 then
