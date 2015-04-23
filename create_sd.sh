@@ -34,8 +34,9 @@ cp "2ndbootloader" "./tmpmount/u-boot.bin"
 cp "kernel" "./tmpmount/uImage-recovery"
 cp "ramdisk-recovery.ub" "./tmpmount/ramdisk-recovery.ub"
 
-#copy dsp firmware and stock images used by u-boot.
+#copy dsp firmware, waveform, and stock images used by u-boot.
 cp "../../../../device/bn/zoom2/prebuilt/boot/flash_spl.bin" "./tmpmount/"
+cp "../../../../device/bn/zoom2/prebuilt/boot/wvf.bin" "./tmpmount/"
 cp "../../../../device/bn/zoom2/prebuilt/boot/dead.pgm" "./tmpmount/"
 cp "../../../../device/bn/zoom2/prebuilt/boot/booting.pgm" "./tmpmount/"
 cp "../../../../device/bn/zoom2/prebuilt/boot/charging0.pgm" "./tmpmount/"
