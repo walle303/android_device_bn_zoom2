@@ -135,11 +135,11 @@ PRODUCT_COPY_FILES += \
 # ramdisk_tools.sh -- use on-demand for various ramdisk operations, such as
 # repacking the ramdisk for use on an SD card or alternate emmc partitions
 PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/ramdisk_tools.sh:ramdisk_tools.sh
+    $(LOCAL_PATH)/ramdisk_tools.sh:ramdisk_tools.sh
 
 #create_sd.sh -- creates a partitioned sdcard image with twrp recovery
 PRODUCT_COPY_FILES += \
-        $(LOCAL_PATH)/create_sd.sh:create_sd.sh
+    $(LOCAL_PATH)/create_sd.sh:create_sd.sh
 
 
 # additions to recovery

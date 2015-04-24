@@ -4,23 +4,32 @@ on early-init
     # cap max CPU frequency to 800 MHz as soon as possible
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 800000
 
-    mkdir /storage 0751 root sdcard_r
-    mkdir /storage/sdcard0 0000 system system
-    mkdir /storage/sdcard1 0000 system system
-    mkdir /mnt/media_rw 0700 media_rw media_rw
-    mkdir /mnt/media_rw/sdcard0 0000 system system
-    mkdir /mnt/media_rw/sdcard1 0000 system system
+on init
+
+#    mkdir /storage 0751 root sdcard_r
+#    mkdir /storage/sdcard0 0000 system system
+#    mkdir /mnt/media_rw 0700 media_rw media_rw
+#    mkdir /mnt/media_rw/sdcard0 0000 system system
+
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /storage/sdcard1 0700 root root
+
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
+    export SECONDARY_STORAGE /storage/sdcard1
 
 # for backwards compatibility
-    symlink /storage/sdcard0 /mnt/emmc
-    symlink /storage/sdcard0 /emmc
-    symlink /storage/sdcard1 /sdcard
-    symlink /storage/sdcard1 /mnt/sdcard
+#link internal /media partition to /emmc
+    symlink /storage/sdcard1 /mnt/emmc
+    symlink /storage/sdcard1 /emmc
 
-    export EXTERNAL_STORAGE /storage/sdcard1
-    export SECONDARY_STORAGE /storage/sdcard0
-
-on init
+#link emulated sdcard to /sdcard
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
 
     # setup global environment
     export PHONE_STORAGE /storage/sdcard0
@@ -43,6 +52,7 @@ on init
     # reduce swappiness for foreground processes
     write /proc/sys/vm/swappiness 20
 on fs
+    setprop ro.crypto.fuse_sdcard true
     # set up links to block devices based on boot location
     mkdir /dev/block/by-name 0755 root root
     start fsfinder
@@ -61,9 +71,9 @@ on post-fs-data
     mkdir /data/media 0775 media_rw media_rw
     chown media_rw media_rw /data/media
 
-    # update vold configuration in fstab
-    start configure_vold
-    wait /dev/.vold_configured
+#    # update vold configuration in fstab
+#    start configure_vold
+#    wait /dev/.vold_configured
 
     setprop vold.post_fs_data_done 1
 
@@ -173,10 +183,10 @@ service fsfinder /sbin/fsfinder
     disabled
     oneshot
 
-service configure_vold /system/bin/configure_vold.sh
-    class core
-    disabled
-    oneshot
+#service configure_vold /system/bin/configure_vold.sh
+#    class core
+#    disabled
+#    oneshot
 
 # Update the battery data heuristics every hour
 service logbatterydata /system/bin/log_battery_data.sh
@@ -229,14 +239,18 @@ service iprenew_bt-pan /system/bin/dhcpcd -n
     disabled
     oneshot
 
+service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
 # FUSE sdcard daemon for rich permissions on external storage (runs as media_rw)
 service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
    class late_start
    disabled
 
-service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard0 /storage/sdcard0
-   class late_start
-   disabled
+#mmcblk1p1 as sdcard. disabled in favor of using emulated sd on data instead.
+#service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/sdcard0 /storage/sdcard0
+#   class late_start
+#   disabled
 
 service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 /mnt/media_rw/usbdisk /storage/usbdisk
    class late_start
