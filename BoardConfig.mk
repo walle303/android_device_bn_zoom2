@@ -75,7 +75,7 @@ BOARD_EGL_CFG := device/bn/zoom2/egl.cfg
 USE_OPENGL_RENDERER := false
 ENABLE_WEBGL := false
 
-TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := false
 
 # for frameworks/native/opengl/libs
 # disable use of unsupported EGL_KHR_gl_colorspace extension
@@ -83,7 +83,7 @@ BOARD_EGL_WORKAROUND_BUG_10194508 := true
 
 # for frameworks/native/libs/gui
 # disable use of EGL_KHR_fence_sync extension, since it slows things down
-COMMON_GLOBAL_CFLAGS += -DDONT_USE_FENCE_SYNC
+#COMMON_GLOBAL_CFLAGS += -DDONT_USE_FENCE_SYNC
 
 # for frameworks/native/services/surfaceflinger
 # use EGL_IMG_context_priority extension, which helps performance
