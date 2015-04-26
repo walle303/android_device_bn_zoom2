@@ -21,7 +21,7 @@
 #
 
 device.internal = 1
-touch.orientationAware = 0
+touch.orientationAware = 1
 
 # Basic Parameters
 touch.deviceType = touchScreen
