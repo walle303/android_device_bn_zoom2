@@ -50,9 +50,9 @@ on fs
 
     write /sys/class/android_usb/android0/enable 0
     write /sys/class/android_usb/android0/idVendor 18D1
-    write /sys/class/android_usb/android0/idProduct D002
+    write /sys/class/android_usb/android0/idProduct 4EE2
     write /sys/class/android_usb/android0/f_ffs/aliases adb
-    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/functions mtp,adb
     write /sys/class/android_usb/android0/iManufacturer ${ro.product.manufacturer}
     write /sys/class/android_usb/android0/iProduct ${ro.product.model}
     write /sys/class/android_usb/android0/iSerial ${ro.serialno}
@@ -62,8 +62,6 @@ on boot
     ifup lo
     hostname localhost
     domainname localdomain
-
-    class_start default
 
 #   Set EPD Flushing Update percentage for AUTO Mode.
     write /sys/class/graphics/fb0/epd_percent 85
@@ -97,7 +95,7 @@ on property:sys.storage.ums_enabled=1
 
 on property:sys.storage.ums_enabled=0
     write /sys/class/android_usb/android0/enable 0
-    write /sys/class/android_usb/android0/functions adb
+    write /sys/class/android_usb/android0/functions ${sys.usb.config}
     write /sys/class/android_usb/android0/enable ${service.adb.root}
 
 on property:sys.usb.config=none
@@ -166,7 +164,7 @@ on property:service.adb.root=1
 
 # load DSP firmware
 service baseimage /sbin/cexec.out -T /etc/dsp/baseimage.dof
-    class default
+    class core
     user root
     group system
     disabled
