@@ -72,21 +72,34 @@ TARGET_ARCH_LOWMEM := true
 
 # HW Graphics (EGL fixes + webkit fix)
 BOARD_EGL_CFG := device/bn/zoom2/egl.cfg
-USE_OPENGL_RENDERER := false
-ENABLE_WEBGL := false
+#setting these true to make hwui work depends on SurfaceFlinger getting a GLES2 EGLContext
+#ddk 1.8 doesn't seem to have one that supports rgb565 so we fallback to gles1 and hwui is disabled
+#ddk 1.12 works, however there are many apparently spurious screen refreshes. 
+#ddk 1.10 haven't tested it yet.
+USE_OPENGL_RENDERER := true
+ENABLE_WEBGL := true
 
-TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := false
+TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
 # for frameworks/native/opengl/libs
 # disable use of unsupported EGL_KHR_gl_colorspace extension
 BOARD_EGL_WORKAROUND_BUG_10194508 := true
 
+#overrides for surfaceflinger
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 2
+#omap3epfb doesn't support 32bit modes
+COMMON_GLOBAL_CFLAGS += -DNO_RGBX_8888
+
+#omap3epfb only supports 2 buffers
+TARGET_DISABLE_TRIPLE_BUFFERING := true
+
 # for frameworks/native/libs/gui
 # disable use of EGL_KHR_fence_sync extension, since it slows things down
-#COMMON_GLOBAL_CFLAGS += -DDONT_USE_FENCE_SYNC
+COMMON_GLOBAL_CFLAGS += -DDONT_USE_FENCE_SYNC
 
 # for frameworks/native/services/surfaceflinger
 # use EGL_IMG_context_priority extension, which helps performance
+# note: not supported by PVR DDK 1.12
 COMMON_GLOBAL_CFLAGS += -DHAS_CONTEXT_PRIORITY
 
 # OMAP3 HWC: disable use of YUV overlays
