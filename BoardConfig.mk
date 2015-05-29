@@ -72,12 +72,14 @@ TARGET_ARCH_LOWMEM := true
 
 # HW Graphics (EGL fixes + webkit fix)
 BOARD_EGL_CFG := device/bn/zoom2/egl.cfg
-#setting these true to make hwui work depends on SurfaceFlinger getting a GLES2 EGLContext
-#ddk 1.8 doesn't seem to have one that supports rgb565 so we fallback to gles1 and hwui is disabled
+
+#ddk 1.8 gets a Gles1 EGLContext, but hwui still works ???
 #ddk 1.12 works, however there are many apparently spurious screen refreshes. 
 #ddk 1.10 haven't tested it yet.
-USE_OPENGL_RENDERER := true
-ENABLE_WEBGL := true
+
+#Disabling for ram usage
+USE_OPENGL_RENDERER := false
+ENABLE_WEBGL := false
 
 TARGET_RUNNING_WITHOUT_SYNC_FRAMEWORK := true
 
