@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2012 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -390,5 +390,5 @@ ifeq ($(TARGET_SCREEN_WIDTH) $(TARGET_SCREEN_HEIGHT),$(space))
 endif
 PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=zoom2 BUILD_FINGERPRINT="generic/zoom2/zoom2/zoom2:2.1/ERD79/1.2.1:user/test-keys" PRIVATE_BUILD_DESC="1.2.1.24.carbon1_2.gossamer.rrdp.s70455"
 
-PRODUCT_NAME := cm_zoom2
+PRODUCT_NAME := lineage_zoom2
 PRODUCT_DEVICE := zoom2

@@ -22,4 +22,4 @@
 
 #add_lunch_combo generic_encore-userdebug
 add_lunch_combo full_zoom2-eng
-add_lunch_combo cyanogen_zoom2-eng
+add_lunch_combo lineage_zoom2-userdebug
